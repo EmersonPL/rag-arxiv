@@ -12,6 +12,7 @@ python = "^3.12"
 psycopg2-binary = "==2.9.10"
 python-decouple = "^3.8"
 openai = "^1.57.0"
+pypdf = "^5.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10"
