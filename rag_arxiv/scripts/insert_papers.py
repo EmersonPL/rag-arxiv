@@ -3,11 +3,11 @@ from os import listdir
 
 from tqdm import tqdm
 
-from processing.embeddings import generate_embeddings
-from processing.process_files import process_file
-from scripts.migrations.utils import connect_to_postgres
+from rag_arxiv.processing.embeddings import generate_embeddings
+from rag_arxiv.processing.process_files import process_file
+from rag_arxiv.utils import connect_to_postgres
 
-DATA_DIR = "../data"
+DATA_DIR = "../../data"
 
 
 @connect_to_postgres

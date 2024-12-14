@@ -1,6 +1,6 @@
 from decouple import config
 
-from utils import connect_to_postgres
+from rag_arxiv.utils import connect_to_postgres
 
 CREATE_PAPERS_TABLE_SQL = """
     CREATE TABLE papers (

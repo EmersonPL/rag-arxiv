@@ -165,3 +165,4 @@ testing_examples/
 example/
 sql_migrations/
 data/
+db_data/
