@@ -1,4 +1,5 @@
 import psycopg2
+from pgvector.psycopg2 import register_vector
 
 
 def connect_to_postgres(func):
@@ -12,11 +13,15 @@ def connect_to_postgres(func):
             host="localhost",
             port=5432,
         )
+        register_vector(conn)
+
         cur = conn.cursor()
 
-        func(conn, cur, *args, **kwargs)
+        result = func(conn, cur, *args, **kwargs)
 
         cur.close()
         conn.close()
+
+        return result
 
     return connection
