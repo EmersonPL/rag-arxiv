@@ -1,6 +1,8 @@
 import os
 from os import listdir
 
+from tqdm import tqdm
+
 from processing.embeddings import generate_embeddings
 from processing.process_files import process_file
 from scripts.migrations.utils import connect_to_postgres
@@ -27,7 +29,7 @@ def main(conn, cur):
 def load_category_files(cur, data_path: str, category_name: str):
     """Insert all papers of a category in the database."""
     papers = listdir(data_path)
-    for paper_code in papers:
+    for paper_code in tqdm(papers):
         if _paper_is_in_db(cur, paper_code, category_name):
             continue
 
@@ -37,6 +39,10 @@ def load_category_files(cur, data_path: str, category_name: str):
 
         name, abs, _ = process_file(f"{data_path}/{paper_code}")
         embeddings = generate_embeddings(abs)
+
+        if embeddings is None:
+            print(f"No embeddings for paper {paper_code}")
+            continue
 
         query = (
             "INSERT INTO "

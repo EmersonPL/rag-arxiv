@@ -1,17 +1,16 @@
 from decouple import config
-from openai import OpenAI
+import google.generativeai as genai
 
 
-def generate_embeddings(text: str):
-    # TODO: Implement actual embeddings
-    return [0.5] * config("EMBEDDINGS_SIZE")
+def generate_embeddings(text: str) -> list[float] | None:
+    api_key = config("GEMINI_API_KEY")
 
-    api_key = config("OPENAI_API_KEY")
+    genai.configure(api_key=api_key)
 
-    client = OpenAI(api_key=api_key, max_retries=0)
-    response = client.embeddings.create(
-        input=text, model=config("EMBEDDINGS_MODEL"), encoding_format="float"
+    result = genai.embed_content(
+        model=config("EMBEDDINGS_MODEL"),
+        content=text,
     )
-    embeddings = response["data"]["embedding"]
+    embeddings = result.get("embedding")
 
     return embeddings
