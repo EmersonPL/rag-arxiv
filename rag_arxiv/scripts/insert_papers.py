@@ -39,27 +39,32 @@ def load_category_files(cur, data_path: str, category_name: str):
             print(f"Paper {paper_code} Does not contain 2 files")
             continue
 
-        name, abs, _ = process_file(f"{data_path}/{paper_code}")
+        name, abs, file_text = process_file(f"{data_path}/{paper_code}")
         embeddings = generate_embeddings(abs)
 
         if embeddings is None:
             print(f"No embeddings for paper {paper_code}")
             continue
 
-        query = (
-            "INSERT INTO "
-            "papers(abs_embedding, abs, name, code, category) "
-            "VALUES ('{embeddings}', '{abs}', '{name}', '{code}', '{category_name}')"
-        )
-
         cur.execute(
-            query.format(
-                embeddings=embeddings,
-                abs=abs.replace("'", "''"),
-                name=name.replace("'", "''"),
-                code=paper_code,
-                category_name=category_name,
-            )
+            "INSERT INTO "
+            "papers(abs_embedding, abs, name, code, category, paper_text) "
+            "VALUES ("
+            "%(embeddings)s, "
+            "%(abs)s, "
+            "%(name)s, "
+            "%(code)s, "
+            "%(category)s, "
+            "%(paper_text)s"
+            ")",
+            {
+                "embeddings": embeddings,
+                "abs": abs,
+                "name": name,
+                "code": paper_code,
+                "category": category_name,
+                "paper_text": file_text,
+            },
         )
 
 
@@ -67,8 +72,12 @@ def _paper_is_in_db(cur, paper_code, category_name):
     cur.execute(
         f"SELECT id "
         f"FROM papers "
-        f"WHERE code='{paper_code}' "
-        f"AND category='{category_name}'"
+        f"WHERE code=%(code)s "
+        f"AND category=%(cat_name)s",
+        {
+            "code": paper_code,
+            "cat_name": category_name,
+        },
     )
     result = cur.fetchone()
     return result is not None
