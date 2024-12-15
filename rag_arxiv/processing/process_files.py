@@ -33,6 +33,12 @@ def process_paper_text(path: str) -> str:
         txt = page.extract_text(0)
         clean_text = txt.replace("\n", " ")
         clean_text = clean_text.replace("- ", "")
+        # Remove characters not allowed on Postgres text column
+        clean_text = clean_text.replace("\x00", "\uFFFD")
+
+        clean_text = clean_text.encode("ascii", errors="replace")
+        clean_text = clean_text.decode("utf-8", errors="replace")
+
         abstract_index = clean_text.find("abstract")
         if abstract_index != -1 and i <= 1:
             clean_text = clean_text[abstract_index:]
