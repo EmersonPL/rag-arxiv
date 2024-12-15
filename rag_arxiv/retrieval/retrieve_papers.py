@@ -1,4 +1,9 @@
+from rag_arxiv.processing.process_files import process_paper_text
 from rag_arxiv.utils import connect_to_postgres
+
+
+# TODO: use a better solution
+DATA_DIR = "data/cs_AI/"
 
 
 @connect_to_postgres
@@ -17,3 +22,14 @@ def retrieve_closest_neighbors(
     results = [r[0] for r in results]
 
     return results
+
+
+def retrieve_papers_text(papers_code: list[str]) -> list[str]:
+    """Return the text of the papers."""
+    texts = []
+    for paper in papers_code:
+        paper_path = f"{DATA_DIR}{paper}/article.pdf"
+        text = process_paper_text(path=paper_path)
+        texts.append(text)
+
+    return texts
