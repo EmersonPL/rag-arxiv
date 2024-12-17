@@ -18,6 +18,10 @@ pyyaml = "^6.0.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10"
+pytest = "^8.3.4"
+scikit-learn = "^1.6.0"
+numpy = "^2.0.0"
+
 
 
 [build-system]

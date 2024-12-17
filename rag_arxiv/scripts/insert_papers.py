@@ -9,8 +9,6 @@ from rag_arxiv.utils import connect_to_postgres
 
 DATA_DIR = "../../data"
 
-# TODO: Maybe add the text to the DB
-
 
 @connect_to_postgres
 def main(conn, cur):
